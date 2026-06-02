@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 export default function Dashboard() {
 
   type Transacao = {
+    id: number;
   nome: string;
 }; // tipando a variavel transação
 
@@ -55,7 +56,7 @@ console.log(token);
   };
 
 
-const deletar = async (nome: string) => {
+const deletar = async (id: number) => {
   const token = localStorage.getItem("token");
 
   await fetch("/api/transacoes", {
@@ -64,15 +65,17 @@ const deletar = async (nome: string) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ nome }),
+    body: JSON.stringify({ id }),
   });
 
-  // atualiza tela
-  setDados(dados.filter(item => item.nome !== nome));
+  setDados(dados.filter(item => item.id !== id));
 };
 
 
-const editar = async (nomeAntigo: string, novoNome: string) => {
+const editar = async (
+  id: number,
+  novoNome: string
+) => {
   const token = localStorage.getItem("token");
 
   await fetch("/api/transacoes", {
@@ -81,12 +84,19 @@ const editar = async (nomeAntigo: string, novoNome: string) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ nomeAntigo, novoNome }),
+    body: JSON.stringify({
+      id,
+      novoNome,
+    }),
   });
 
-  setDados(dados.map(item =>
-    item.nome === nomeAntigo ? { nome: novoNome } : item
-  ));
+  setDados(
+    dados.map(item =>
+      item.id === id
+        ? { ...item, nome: novoNome }
+        : item
+    )
+  );
 };
 
 
@@ -97,7 +107,7 @@ const editar = async (nomeAntigo: string, novoNome: string) => {
       {dados.map((item, i) => (
         <div key={i}>
           <p>{item.nome}</p>
-                <button onClick={() => deletar(item.nome)}>Excluir</button>
+                <button onClick={() => deletar(item.id)}>Excluir</button>
 
                 <button
   onClick={() => {

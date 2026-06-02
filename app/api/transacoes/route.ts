@@ -64,9 +64,15 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const body = await req.json();
 
-  console.log("deletar:", body.nome);
+  await prisma.transacao.delete({
+    where: {
+      id: body.id,
+    },
+  });
 
-  return Response.json({ ok: true });
+  return Response.json({
+    ok: true,
+  });
 }
 
 
@@ -74,7 +80,14 @@ export async function DELETE(req: Request) {
 export async function PUT(req: Request) {
   const body = await req.json();
 
-  console.log("editar:", body);
+  const transacao = await prisma.transacao.update({
+    where: {
+      id: body.id,
+    },
+    data: {
+      nome: body.novoNome,
+    },
+  });
 
-  return Response.json({ ok: true });
+  return Response.json(transacao);
 }
