@@ -40,7 +40,7 @@ console.log(token);
   // 🔹 CHAMA FUNÇÃO POST
 
 
-    await fetch("/api/transacoes", {
+    const res = await fetch("/api/transacoes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,8 @@ console.log(token);
     
 
     // atualiza tela sem recarregar
-    setDados([...dados, { nome }]);
+    const novaTransacao = await res.json();
+    setDados([...dados, novaTransacao]);
     setNome(""); // limpa input
   };
 
@@ -114,7 +115,7 @@ const editar = async (
     const novoNome = prompt("Novo nome");
 
     if (novoNome) {
-      editar(item.nome, novoNome);
+      editar(item.id, novoNome);
     }
   }}
 >

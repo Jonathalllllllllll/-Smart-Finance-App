@@ -5,6 +5,10 @@ export const runtime = "nodejs";
 
 const SECRET = "segredo";
 
+type TokenPayload = {
+  id: number;
+  email: string;
+};
 
 // GET
 export async function GET(req: Request) {
@@ -17,10 +21,16 @@ export async function GET(req: Request) {
   const token = auth.split(" ")[1];
 
   try {
-    jwt.verify(token, SECRET);
-
-    const transacoes = await prisma.transacao.findMany();
-
+const decoded = jwt.verify(
+      token,
+      SECRET
+    ) as TokenPayload;
+    
+const transacoes = await prisma.transacao.findMany({
+  where: {
+    userId: decoded.id,
+  },
+});
     return Response.json({
       transacoes,
     });
@@ -45,12 +55,22 @@ export async function POST(req: Request) {
     jwt.verify(token, SECRET);
 
     const body = await req.json();
+    type TokenPayload = {
+  id: number;
+  email: string;
+};
+
+const decoded = jwt.verify(token, SECRET) as TokenPayload;
 
     const transacao = await prisma.transacao.create({
       data: {
         nome: body.nome,
+            userId: decoded.id,
+
       },
     });
+
+   
 
     return Response.json(transacao);
 

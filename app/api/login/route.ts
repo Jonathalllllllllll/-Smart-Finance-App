@@ -1,18 +1,32 @@
+import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 
-const SECRET = "segredo"; // depois melhora isso
+const SECRET = "segredo";
 
 export async function POST(req: Request) {
   const { email } = await req.json();
 
-  // aqui depois vai validar no banco
-  if (!email) {
-    return Response.json({ error: "Email obrigatório" }, { status: 400 });
-  }
-
-  const token = jwt.sign({ email }, SECRET, {
-    expiresIn: "1h",
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
   });
 
+  if (!user) {
+    return Response.json(
+      { error: "Usuário não encontrado" },
+      { status: 404 }
+    );
+  }
+
+  const token = jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+    },
+    SECRET,
+    { expiresIn: "1h" }
+  );
+console.log(user);
   return Response.json({ token });
 }

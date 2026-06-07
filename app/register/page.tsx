@@ -13,6 +13,7 @@ export default function Register() {
 
     alert("Enviado!");
   };
+  
 
   return (
     <div>
