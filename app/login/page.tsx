@@ -4,24 +4,30 @@ import { useState } from "react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
 
   const handleLogin = async () => {
-    console.log("clicou");
-
     const res = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({
+        email,
+        senha,
+      }),
     });
 
     const data = await res.json();
-console.log(data);
 
-    localStorage.setItem("token", data.token);
+    console.log(data);
 
-    alert("Login feito!");
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+      alert("Login feito!");
+    } else {
+      alert(data.error);
+    }
   };
 
   return (
@@ -29,13 +35,20 @@ console.log(data);
       <h1>Login</h1>
 
       <input
-        type="text"
+        type="email"
         placeholder="Email"
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      <button onClick={handleLogin}>Entrar</button>
-      
+      <input
+        type="password"
+        placeholder="Senha"
+        onChange={(e) => setSenha(e.target.value)}
+      />
+
+      <button onClick={handleLogin}>
+        Entrar
+      </button>
     </div>
   );
 }
