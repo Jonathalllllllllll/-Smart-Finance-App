@@ -22,6 +22,9 @@ model Transacao {
   id          Int        @id @default(autoincrement())
   nome        String
 
+    valor Float?
+
+
   categoriaId Int
   categoria   Categoria  @relation(fields: [categoriaId], references: [id])
 

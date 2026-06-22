@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import GraficoCategorias from "../components/GraficoCategorias";
 
 
 type Transacao = {
   id: number;
   nome: string;
+  valor: number;
 
   categoria: {
     id: number;
@@ -17,6 +19,7 @@ export default function Dashboard() {
   const [dados, setDados] = useState<Transacao[]>([]);
   const [nome, setNome] = useState("");
   const [categoriaId, setCategoriaId] = useState(1);
+const [valor, setValor] = useState<number>(0);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -45,6 +48,7 @@ export default function Dashboard() {
       body: JSON.stringify({
         nome,
         categoriaId,
+        valor,//obs: incluir para na API post transacoes ele recebr a avriavel valor
       }),
     });
 
@@ -106,8 +110,10 @@ export default function Dashboard() {
       {dados.map((item) => (
         <div key={item.id}>
           <p>
-            {item.nome} - {item.categoria?.nome}
-          </p>
+  {item.nome} -
+  R$ {item.valor} -
+  {item.categoria?.nome}
+</p>
 
           <button
             onClick={() => deletar(item.id)}
@@ -176,9 +182,23 @@ export default function Dashboard() {
       <br />
       <br />
 
+      <input
+  type="number"
+  placeholder="Valor"
+  value={valor}
+        onChange={(e) =>
+          setValor(
+            Number(e.target.value)
+          )
+        }
+/>
+
       <button onClick={adicionar}>
         Adicionar
       </button>
+
+
+      <GraficoCategorias />
     </div>
   );
 }

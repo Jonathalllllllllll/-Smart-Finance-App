@@ -69,6 +69,7 @@ const transacao = await prisma.transacao.create({
   data: {
     nome: body.nome,
     userId: decoded.id,
+    valor: body.valor,
     categoriaId: body.categoriaId,
   },
   include: {
