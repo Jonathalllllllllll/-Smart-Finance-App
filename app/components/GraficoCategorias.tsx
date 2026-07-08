@@ -5,6 +5,8 @@ import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 export default function GraficoCategorias() {
   const [data, setData] = useState([]);
+        const [dados, setDados] = useState([]);
+
 
   useEffect(() => {
     async function load() {
@@ -12,6 +14,16 @@ export default function GraficoCategorias() {
       const json = await res.json();
       setData(json);
     }
+
+     const token = localStorage.getItem("token");
+
+  fetch("/api/grafico/categorias", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => setDados(data));
 
     load();
   }, []);
