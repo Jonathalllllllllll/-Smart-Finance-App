@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import GraficoCategorias from "../components/GraficoCategorias";
 import GraficoMedia from "../components/GraficoMedia";
-
+import UploadComprovante from "../components/UploadComprovante";
 
 type Transacao = {
   id: number;
@@ -209,7 +209,13 @@ const [valor, setValor] = useState<number>(0);
 
 <h2>Média por Categoria</h2>
 
-<GraficoMedia />    </div>
+<GraficoMedia />   
+
+
+<hr />
+
+<UploadComprovante />
+ </div>
   );
 }
 
