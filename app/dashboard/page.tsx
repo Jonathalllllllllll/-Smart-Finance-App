@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import GraficoCategorias from "../components/GraficoCategorias";
+import GraficoMedia from "../components/GraficoMedia";
 
 
 type Transacao = {
@@ -198,8 +199,17 @@ const [valor, setValor] = useState<number>(0);
       </button>
 
 
-      <GraficoCategorias />
-    </div>
+<hr />
+
+<h2>Gastos por Categoria</h2>
+
+<GraficoCategorias />
+
+<hr />
+
+<h2>Média por Categoria</h2>
+
+<GraficoMedia />    </div>
   );
 }
 

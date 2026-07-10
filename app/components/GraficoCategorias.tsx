@@ -1,32 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { PieChart, Pie, Tooltip, Legend } from "recharts";
 
-export default function GraficoCategorias() {
-  const [data, setData] = useState([]);
-        const [dados, setDados] = useState([]);
+type Grafico = { name: string; value: number; }; 
+export default function GraficoCategorias() { const [data, setData] = useState<Grafico[]>([]);
 
 
-  useEffect(() => {
-    async function load() {
-      const res = await fetch("/api/grafico/categorias");
-      const json = await res.json();
-      setData(json);
-    }
+ useEffect(() => {
+  async function load() {
+    const token = localStorage.getItem("token");
 
-     const token = localStorage.getItem("token");
+    const res = await fetch("/api/grafico/categorias", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-  fetch("/api/grafico/categorias", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => res.json())
-    .then((data) => setDados(data));
+    const json = await res.json();
+    setData(json);
+  }
 
-    load();
-  }, []);
+  load();
+}, []);
 
   return (
     <PieChart width={400} height={300}>
