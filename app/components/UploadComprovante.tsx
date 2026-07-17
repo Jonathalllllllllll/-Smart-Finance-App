@@ -6,25 +6,25 @@ export default function UploadComprovante() {
   const [arquivo, setArquivo] = useState<File | null>(null);
 
   async function enviarImagem() {
-    if (!arquivo) {
-      alert("Selecione uma imagem.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("imagem", arquivo);
-
-    const res = await fetch("/api/comprovante", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await res.json();
-
-    console.log(data);
-
-    alert(data.mensagem);
+  if (!arquivo) {
+    alert("Selecione uma imagem.");
+    return;
   }
+
+  const formData = new FormData();
+  formData.append("imagem", arquivo);
+
+  const res = await fetch("/api/comprovante", {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json();
+
+console.log(data);
+
+alert(JSON.stringify(data));
+}
 
   return (
     <div>
