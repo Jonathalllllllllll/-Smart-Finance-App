@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import GraficoCategorias from "../components/GraficoCategorias";
 import GraficoMedia from "../components/GraficoMedia";
+import GraficoGastosMeses from "../components/GraficoGastosMeses";
 import UploadComprovante from "../components/UploadComprovante";
 
 type Transacao = {
   id: number;
   nome: string;
   valor: number;
+  data: string;
 
   categoria: {
     id: number;
@@ -21,6 +23,7 @@ export default function Dashboard() {
   const [nome, setNome] = useState("");
   const [categoriaId, setCategoriaId] = useState(1);
 const [valor, setValor] = useState<number>(0);
+const [data, setData] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -50,6 +53,7 @@ const [valor, setValor] = useState<number>(0);
         nome,
         categoriaId,
         valor,//obs: incluir para na API post transacoes ele recebr a avriavel valor
+        data
       }),
     });
 
@@ -58,6 +62,7 @@ const [valor, setValor] = useState<number>(0);
     setDados([...dados, novaTransacao]);
 
     setNome("");
+    setData("");
   };
 
   const deletar = async (id: number) => {
@@ -114,6 +119,7 @@ const [valor, setValor] = useState<number>(0);
   {item.nome} -
   R$ {item.valor} -
   {item.categoria?.nome}
+  {item.data} -
 </p>
 
           <button
@@ -194,6 +200,16 @@ const [valor, setValor] = useState<number>(0);
         }
 />
 
+     <input
+  type="date"
+  value={data}
+        onChange={(e) =>
+          setData(
+            String(e.target.value)
+          )
+        }
+/>
+
       <button onClick={adicionar}>
         Adicionar
       </button>
@@ -210,6 +226,21 @@ const [valor, setValor] = useState<number>(0);
 <h2>Média por Categoria</h2>
 
 <GraficoMedia />   
+
+<hr />
+
+<h2>Valor total de gastos</h2>
+
+sum(item.valor);
+
+
+<h2>Valor dos gastos distribuidos por meses</h2>
+
+<GraficoGastosMeses />
+
+
+
+
 
 
 <hr />
