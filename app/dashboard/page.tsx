@@ -110,302 +110,176 @@ const [data, setData] = useState("");
   };
 
   return (
-    <div>
-      <h1>Dashboard</h1>
+  <main className="container">
+    <h1>💰 Controle Financeiro Inteligente</h1>
 
-      {dados.map((item) => (
-        <div key={item.id}>
-          <p>
-  {item.nome} -
-  R$ {item.valor} -
-  {item.categoria?.nome}
-  {item.data} -
-</p>
+    <div className="card">
+      <h2>Nova Transação</h2>
 
-          <button
-            onClick={() => deletar(item.id)}
-          >
-            Excluir
-          </button>
+      <div className="grid grid-2">
+        <input
+          type="text"
+          placeholder="Nome da transação"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+        />
 
-          <button
-            onClick={() => {
-              const novoNome =
-                prompt("Novo nome");
+        <select
+          value={categoriaId}
+          onChange={(e) =>
+            setCategoriaId(Number(e.target.value))
+          }
+        >
+          <option value="1">Alimentação</option>
+          <option value="2">Transporte</option>
+          <option value="3">Moradia</option>
+          <option value="4">Investimentos</option>
+          <option value="5">Lazer</option>
+        </select>
 
-              if (novoNome) {
-                editar(item.id, novoNome);
-              }
-            }}
-          >
-            Editar
-          </button>
-        </div>
-      ))}
+        <input
+          type="number"
+          placeholder="Valor"
+          value={valor}
+          onChange={(e) =>
+            setValor(Number(e.target.value))
+          }
+        />
 
-      <br />
+        <input
+          type="date"
+          value={data}
+          onChange={(e) =>
+            setData(e.target.value)
+          }
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Nova transação"
-        value={nome}
-        onChange={(e) =>
-          setNome(e.target.value)
-        }
-      />
-
-      <br />
-      <br />
-
-      <select
-        value={categoriaId}
-        onChange={(e) =>
-          setCategoriaId(
-            Number(e.target.value)
-          )
-        }
+      <button
+        style={{ marginTop: 20 }}
+        onClick={adicionar}
       >
-        <option value="1">
-          Alimentação
-        </option>
-
-        <option value="2">
-          Transporte
-        </option>
-
-        <option value="3">
-          Moradia
-        </option>
-
-        <option value="4">
-          Investimentos
-        </option>
-
-        <option value="5">
-          Lazer
-        </option>
-      </select>
-
-      <br />
-      <br />
-
-      <input
-  type="number"
-  placeholder="Valor"
-  value={valor}
-        onChange={(e) =>
-          setValor(
-            Number(e.target.value)
-          )
-        }
-/>
-
-     <input
-  type="date"
-  value={data}
-        onChange={(e) =>
-          setData(
-            String(e.target.value)
-          )
-        }
-/>
-
-      <button onClick={adicionar}>
-        Adicionar
+        Adicionar Transação
       </button>
-
-
-<hr />
-
-<h2>Gastos por Categoria</h2>
-
-<GraficoCategorias />
-
-<hr />
-
-<h2>Média por Categoria</h2>
-
-<GraficoMedia />   
-
-<hr />
-
-<h2>Valor total de gastos</h2>
-
-sum(item.valor);
-
-
-<h2>Valor dos gastos distribuidos por meses</h2>
-
-<GraficoGastosMeses />
-
-
-
-
-
-
-<hr />
-
-<UploadComprovante />
- </div>
-  );
-}
-
-/*
-
-export default function Dashboard() {
-
- type Transacao = {
-  id: number;
-  nome: string;
-
-  categoria: {
-    id: number;
-    nome: string;
-  };
-}; // tipando a variavel transação
-
-const [dados, setDados] = useState<Transacao[]>([]);
-  const [nome, setNome] = useState(""); // 👈 FALTAVA
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const [categoriaId, setCategoriaId] = useState(1);
-      // 🔹CHAMA   FUNÇÃO GET
-
-    fetch("/api/transacoes", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        setDados(data.transacoes); // depende do seu backend
-      });
-  }, []);
-
-
-
-
-  const adicionar = async () => {
-    const token = localStorage.getItem("token");
-console.log(token);
-  // 🔹 CHAMA FUNÇÃO POST
-
-
-    const res = await fetch("/api/transacoes", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    body: JSON.stringify({
-      nome,
-      categoriaId,
-    }),    
-});
-    
-
-    // atualiza tela sem recarregar
-    const novaTransacao = await res.json();
-    setDados([...dados, novaTransacao]);
-    setNome(""); // limpa input
-  };
-
-
-const deletar = async (id: number) => {
-  const token = localStorage.getItem("token");
-
-  await fetch("/api/transacoes", {
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({ id }),
-  });
-
-  setDados(dados.filter(item => item.id !== id));
-};
-
-
-const editar = async (
-  id: number,
-  novoNome: string
-) => {
-  const token = localStorage.getItem("token");
-
-  await fetch("/api/transacoes", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify({
-      id,
-      novoNome,
-    }),
-  });
-
-  setDados(
-    dados.map(item =>
-      item.id === id
-        ? { ...item, nome: novoNome }
-        : item
-    )
-  );
-};
-
-
-  return (
-    <div>
-      <h1>Dashboard</h1>
-
-      {dados.map((item, i) => (
-        <div key={i}>
-          <p>{item.nome}</p>
-                <button onClick={() => deletar(item.id)}>Excluir</button>
-
-                <button
-  onClick={() => {
-    const novoNome = prompt("Novo nome");
-
-    if (novoNome) {
-      editar(item.id, novoNome);
-    }
-  }}
->
-  Editar2
-</button>
-        </div>
-
-        
-      ))}
-
-      <input
-        type="text"
-        placeholder="Nova transação"
-        value={nome}
-        onChange={(e) => setNome(e.target.value)}
-      />
-
-      <button onClick={adicionar}>Adicionar</button>
-
-
-
-<select>
-  <option value="1">Alimentação</option>
-  <option value="2">Transporte</option>
-  <option value="3">Moradia</option>
-  <option value="4">Investimentos</option>
-  <option value="5">Lazer</option>
-
-
-</select>
     </div>
 
-    
-  );
-  
+    <div className="card">
+      <h2>Transações</h2>
+
+      {dados.length === 0 && (
+        <p>Nenhuma transação cadastrada.</p>
+      )}
+
+      {dados.map((item) => (
+        <div
+          key={item.id}
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "15px 0",
+            borderBottom: "1px solid #ddd",
+            flexWrap: "wrap",
+            gap: "10px",
+          }}
+        >
+          <div>
+            <strong>{item.nome}</strong>
+
+            <br />
+
+            <span className="valor">
+              R$ {item.valor.toFixed(2)}
+            </span>
+
+            {" • "}
+
+            {item.categoria?.nome}
+
+            {" • "}
+
+            {new Date(item.data).toLocaleDateString(
+              "pt-BR"
+            )}
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+            }}
+          >
+            <button
+              className="editar"
+              onClick={() => {
+                const novoNome =
+                  prompt("Novo nome");
+
+                if (novoNome)
+                  editar(item.id, novoNome);
+              }}
+            >
+              Editar
+            </button>
+
+            <button
+              className="excluir"
+              onClick={() => deletar(item.id)}
+            >
+              Excluir
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div className="grid grid-2">
+
+      <div className="card">
+        <h2>Gastos por Categoria</h2>
+
+        <GraficoCategorias />
+      </div>
+
+      <div className="card">
+        <h2>Média por Categoria</h2>
+
+        <GraficoMedia />
+      </div>
+
+    </div>
+
+    <div className="card">
+      <h2>Distribuição dos Gastos por Mês</h2>
+
+      <GraficoGastosMeses />
+    </div>
+
+    <div className="card">
+      <h2>
+        Total Gasto
+      </h2>
+
+      <h1
+        style={{
+          color: "#2E7C68",
+        }}
+      >
+        R$
+        {" "}
+        {dados
+          .reduce(
+            (acc, item) =>
+              acc + (item.valor ?? 0),
+            0
+          )
+          .toFixed(2)}
+      </h1>
+    </div>
+
+    <div className="card">
+      <UploadComprovante />
+    </div>
+  </main>
+);
 }
-  */
