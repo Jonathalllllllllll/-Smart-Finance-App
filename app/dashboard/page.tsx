@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 import { useEffect, useState } from "react";
 import GraficoCategorias from "../components/GraficoCategorias";
 import GraficoMedia from "../components/GraficoMedia";
@@ -19,26 +21,55 @@ type Transacao = {
 };
 
 export default function Dashboard() {
+  const router = useRouter();
+  const [carregando, setCarregando] = useState(true);
+
+  
   const [dados, setDados] = useState<Transacao[]>([]);
   const [nome, setNome] = useState("");
   const [categoriaId, setCategoriaId] = useState(1);
 const [valor, setValor] = useState<number>(0);
 const [data, setData] = useState("");
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
+useEffect(() => {
+  const token = localStorage.getItem("token");
 
-    fetch("/api/transacoes", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+  if (!token) {
+    router.push("/login");
+    return;
+  }
+
+  fetch("/api/transacoes", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then(async (res) => {
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return null;
+      }
+
+      if (!res.ok) {
+        throw new Error("Erro ao carregar transações");
+      }
+
+      return res.json();
     })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
+    .then((data) => {
+      if (data) {
         setDados(data.transacoes);
-      });
-  }, []);
+      }
+
+      setCarregando(false);
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar transações:", error);
+      setCarregando(false);
+    });
+}, [router]);
+
 
   const adicionar = async () => {
     const token = localStorage.getItem("token");
@@ -108,6 +139,9 @@ const [data, setData] = useState("");
       )
     );
   };
+  if (carregando) {
+  return <p>Carregando...</p>;
+}
 
   return (
   <main className="container">
@@ -189,7 +223,7 @@ const [data, setData] = useState("");
             <br />
 
             <span className="valor">
-              R$ {item.valor.toFixed(2)}
+              R$ {(item.valor ?? 0).toFixed(2)}
             </span>
 
             {" • "}
@@ -282,4 +316,5 @@ const [data, setData] = useState("");
     </div>
   </main>
 );
+
 }

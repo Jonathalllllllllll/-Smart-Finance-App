@@ -9,16 +9,37 @@ export default function GraficoCategorias() { const [data, setData] = useState<G
 
  useEffect(() => {
   async function load() {
-    const token = localStorage.getItem("token");
+    try {
+      const token = localStorage.getItem("token");
 
-    const res = await fetch("/api/grafico/categorias", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      if (!token) {
+        return;
+      }
 
-    const json = await res.json();
-    setData(json);
+      const res = await fetch("/api/grafico/categorias", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        return;
+      }
+
+      if (!res.ok) {
+        console.error("Erro ao carregar gráfico.");
+        return;
+      }
+
+      const json = await res.json();
+
+      if (Array.isArray(json)) {
+        setData(json);
+      }
+    } catch (error) {
+      console.error("Erro ao carregar gráfico:", error);
+    }
   }
 
   load();
