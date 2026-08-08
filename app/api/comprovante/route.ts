@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     : 0;
 
   const dataEncontrada =
-    texto.match(/\d{2}\/\d{2}\/\d{4}/);
+  texto.match(/\d{2}\/\d{2}\/\d{4}/);
 
   const dataCupom = dataEncontrada
     ? dataEncontrada[0]
