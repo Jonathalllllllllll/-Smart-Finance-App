@@ -6,6 +6,26 @@ The application allows users to create an account, authenticate securely, manage
 
 🚀 Live Demo: https://smart-finance-app-silk.vercel.app
 
+## 📸 Screenshots
+
+### Login
+
+![Login](docs/screenshots/login.png)
+
+### Register
+
+![Login](docs/screenshots/register.PNG)
+
+
+### Dashboard
+
+![Dashboard](docs/screenshots/inclusion_edition_transactions.PNG)
+
+### Gráficos
+
+![Gráficos](docs/screenshots/dashboard_graphics.PNG)
+
+
 ## Features
 
 * 👤 User registration
