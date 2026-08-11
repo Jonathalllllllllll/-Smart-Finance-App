@@ -10,20 +10,20 @@ The application allows users to create an account, authenticate securely, manage
 
 ### Login
 
-![Login](docs/screenshots/login.png)
+![Login](public/docs/screenshots/login.png)
 
 ### Register
 
-![Login](docs/screenshots/register.PNG)
+![Login](public/docs/screenshots/register.PNG)
 
 
 ### Dashboard
 
-![Dashboard](docs/screenshots/inclusion_edition_transactions.PNG)
+![Dashboard](public/docs/screenshots/inclusion_edition_transactions.PNG)
 
 ### Gráficos
 
-![Gráficos](docs/screenshots/dashboard_graphics.PNG)
+![Gráficos](public/docs/screenshots/dashboard_graphics.PNG)
 
 
 ## Features
