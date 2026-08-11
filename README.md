@@ -4,6 +4,8 @@ A fullstack financial management application developed to help users organize an
 
 The application allows users to create an account, authenticate securely, manage financial transactions and visualize their expenses through interactive charts.
 
+🚀 Live Demo: https://smart-finance-app-silk.vercel.app
+
 ## Features
 
 * 👤 User registration
@@ -250,7 +252,7 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-DATABASE_URL="your_postgresql_connection_string"
+DATABASE_URL="postgresql://neondb_owner:npg_DRsTXQ02UuZe@ep-summer-frost-ax1q7jz1-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 ```
 
 Do not commit your `.env` file to GitHub.
@@ -408,12 +410,5 @@ Possible improvements for future versions include:
 
 Developed as a fullstack development project focused on financial management, modern web technologies and practical application of backend and frontend concepts.
 
----
 
-⭐ If you found this project interesting, feel free to explore the repository and follow its development.
 
-## 📄 License
-
-This project is intended for educational and development purposes.
-
-Esse README já está estruturado para ser o **README principal do GitHub**, com instalação, arquitetura, funcionalidades, tecnologias, banco, autenticação, OCR e deploy.
