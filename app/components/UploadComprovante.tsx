@@ -14,6 +14,40 @@ export default function UploadComprovante() {
   const formData = new FormData();
   formData.append("imagem", arquivo);
 
+
+    try {
+    const res = await fetch("/api/comprovante", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(
+        data.erro ||
+        "Não foi possível processar o comprovante."
+      );
+
+      console.error(data);
+
+      return;
+    }
+
+    alert("Comprovante processado com sucesso!");
+
+    console.log(data);
+
+  } catch (error) {
+    console.error("Erro ao enviar comprovante:", error);
+
+    alert(
+      "Não foi possível processar o comprovante."
+    );
+  }
+
+
+  /*
   const res = await fetch("/api/comprovante", {
     method: "POST",
     body: formData,
@@ -24,6 +58,7 @@ export default function UploadComprovante() {
 console.log(data);
 
 alert(JSON.stringify(data));
+*/
 }
 
   return (
