@@ -30,9 +30,7 @@ export async function GET(req: Request) {
     ) as TokenPayload;
 
     const transacoes = await prisma.transacao.findMany({
-      where: {
-        userId: decoded.id,
-      },
+      
       include: {
         categoria: true,
       },
